@@ -9,6 +9,7 @@ The main workspace is `worklog/`. It captures AI work records, daily reports, we
 ```text
 worklog/
   daily/             Daily AI work records and reports
+    drafts/          Automatically generated daily report drafts
   weekly/            Weekly rollups
   projects/
     <project-slug>/
@@ -53,3 +54,23 @@ Recommended cron trigger:
 ```
 
 The inbox is raw capture. Daily reports, weekly reports, and project memory should be distilled from the inbox plus repository changes.
+
+## Automatic Daily Drafts
+
+Generate a daily report draft from the Codex inbox:
+
+```bash
+python3 scripts/daily_report_draft.py --date YYYY-MM-DD
+```
+
+Recommended cron trigger:
+
+```cron
+50 23 * * * /usr/bin/python3 /root/menglong/github/docs_all_process/scripts/codex_activity_capture.py --since-days 2 >> /tmp/ai-dev-memory-capture.log 2>&1 && /usr/bin/python3 /root/menglong/github/docs_all_process/scripts/daily_report_draft.py >> /tmp/ai-dev-memory-daily-draft.log 2>&1
+```
+
+Drafts are written to:
+
+```text
+worklog/daily/drafts/YYYY-MM-DD.md
+```
